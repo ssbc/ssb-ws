@@ -1,0 +1,6 @@
+# ssb-ws
+
+
+## License
+
+MIT

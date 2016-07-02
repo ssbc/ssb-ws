@@ -1,0 +1,22 @@
+{
+  "name": "ssb-ws",
+  "description": "",
+  "version": "0.0.0",
+  "homepage": "https://github.com/dominictarr/ssb-ws",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dominictarr/ssb-ws.git"
+  },
+  "dependencies": {
+    "multiblob-http": "0.0.0",
+    "multiserver": "^1.0.3",
+    "muxrpc": "^6.3.3",
+    "pull-stream": "^3.4.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "set -e; for t in test/*.js; do node $t; done"
+  },
+  "author": "'Dominic Tarr' <dominic.tarr@gmail.com> (dominictarr.com)",
+  "license": "MIT"
+}
