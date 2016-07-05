@@ -1,4 +1,3 @@
-
 var MultiServer = require('multiserver')
 var WS = require('multiserver/plugins/ws')
 var SHS = require('multiserver/plugins/shs')
@@ -17,7 +16,7 @@ exports.manifest = {}
 
 exports.init = function (api, config) {
 
-  var server = http.createServer(BlobsHttp(api.blobs)).listen(8989)
+  var server = http.createServer(BlobsHttp(api.blobs, '/blobs')).listen(8989)
 
   function toSodiumKeys(keys) {
     return {
@@ -55,7 +54,4 @@ exports.init = function (api, config) {
     pull(stream, rpc.createStream(), stream)
   })
 }
-
-
-
 
