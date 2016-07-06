@@ -1,32 +1,43 @@
 var MultiServer = require('multiserver')
 var WS = require('multiserver/plugins/ws')
 var SHS = require('multiserver/plugins/shs')
-var BlobsHttp = require('multiblob-http')
 var http = require('http')
 var muxrpc = require('muxrpc')
 var pull = require('pull-stream')
 
+var JSONApi = require('./json-api')
+
 var cap =
   new Buffer('1KHLiKZvAvjbY1ziZEHMXawbCEIM6qwjCDm3VYRan/s=', 'base64')
+
+function toSodiumKeys(keys) {
+  return {
+    publicKey:
+      new Buffer(keys.public.replace('.ed25519',''), 'base64'),
+    secretKey:
+      new Buffer(keys.private.replace('.ed25519',''), 'base64'),
+  }
+}
+
+var READ_ONLY = [
+  'get',
+  'createLogStream',
+  'createUserStream',
+  'links'
+//  'add',
+//  'blobs.get',
+//  'blobs.add',
+//  'query.read',
+]
 
 
 exports.name = 'ws'
 exports.version = require('./package.json').version
 exports.manifest = {}
 
-exports.init = function (api, config) {
+exports.init = function (sbot, config) {
 
-  var server = http.createServer(BlobsHttp(api.blobs, '/blobs')).listen(8989)
-
-  function toSodiumKeys(keys) {
-    return {
-      publicKey:
-        new Buffer(keys.public.replace('.ed25519',''), 'base64'),
-      secretKey:
-        new Buffer(keys.private.replace('.ed25519',''), 'base64'),
-    }
-
-  }
+  var server = http.createServer(JSONApi(sbot)).listen(8989)
 
   var ms = MultiServer([
     [
@@ -36,11 +47,8 @@ exports.init = function (api, config) {
         appKey: cap,
         auth: function (id, cb) {
           id = '@'+id.toString('base64')+'.ed25519'
-          console.log('access request from:', id)
-          //cb(null, true)
-          api.auth(id, function (err, perms) {
-            console.log('AUTH', err, perms)
-            cb(null, {allow: ['createHistoryStream'], deny: null})
+          sbot.auth(id, function (err, perms) {
+            cb(null, {allow: READ_ONLY, deny: ['publish']})
           })
         },
         timeout: config.timeout
@@ -49,8 +57,8 @@ exports.init = function (api, config) {
   ])
 
   ms.server(function (stream) {
-    var manifest = api.getManifest()
-    var rpc = muxrpc({}, manifest)(api)
+    var manifest = sbot.getManifest()
+    var rpc = muxrpc({}, manifest)(sbot)
     pull(stream, rpc.createStream(), stream)
   })
 }
