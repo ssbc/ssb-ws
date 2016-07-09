@@ -35,6 +35,10 @@ exports.name = 'ws'
 exports.version = require('./package.json').version
 exports.manifest = {}
 
+function toId(id) {
+  return '@'+id.toString('base64')+'.ed25519'
+}
+
 exports.init = function (sbot, config) {
 
   var server = http.createServer(JSONApi(sbot)).listen(8989)
@@ -46,8 +50,7 @@ exports.init = function (sbot, config) {
         keys: toSodiumKeys(config.keys),
         appKey: cap,
         auth: function (id, cb) {
-          id = '@'+id.toString('base64')+'.ed25519'
-          sbot.auth(id, cb)
+          sbot.auth(toId(id), cb)
         },
         timeout: config.timeout
       })
@@ -57,7 +60,9 @@ exports.init = function (sbot, config) {
   ms.server(function (stream) {
     var manifest = sbot.getManifest()
     var rpc = muxrpc({}, manifest)(sbot)
+    rpc.id = toId(stream.id)
     pull(stream, rpc.createStream(), stream)
   })
 }
+
 
