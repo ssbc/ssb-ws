@@ -23,11 +23,14 @@ var READ_ONLY = [
   'get',
   'createLogStream',
   'createUserStream',
-  'links'
-//  'add',
-//  'blobs.get',
-//  'blobs.add',
-//  'query.read',
+  'links',
+  'blobs.add',
+  'blobs.get',
+
+  'add',
+
+  'query.read',
+  'links2.read'
 ]
 
 
@@ -42,6 +45,23 @@ function toId(id) {
 exports.init = function (sbot, config) {
 
   var server = http.createServer(JSONApi(sbot)).listen(8989)
+
+  //allow friends to 
+  sbot.auth.hook(function (fn, args) {
+    var id = args[0]
+    var cb = args[1]
+    var self = this
+    fn.apply(self, [id, function (err, allowed) {
+      if(err) return cb(err)
+      if(allowed) return cb(null, allowed)
+      sbot.friends.get({source: sbot.id, dest: id}, function (err, follows) {
+        if(err) return cb(err)
+        else if(follows) cb(null, {allow: READ_ONLY, deny: null})
+        else cb()
+      })
+    }])
+
+  })
 
   var ms = MultiServer([
     [
@@ -64,5 +84,15 @@ exports.init = function (sbot, config) {
     pull(stream, rpc.createStream(), stream)
   })
 }
+
+
+
+
+
+
+
+
+
+
 
 
