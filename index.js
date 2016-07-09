@@ -47,9 +47,7 @@ exports.init = function (sbot, config) {
         appKey: cap,
         auth: function (id, cb) {
           id = '@'+id.toString('base64')+'.ed25519'
-          sbot.auth(id, function (err, perms) {
-            cb(null, {allow: READ_ONLY, deny: ['publish']})
-          })
+          sbot.auth(id, cb)
         },
         timeout: config.timeout
       })
