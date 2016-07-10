@@ -80,19 +80,8 @@ exports.init = function (sbot, config) {
   ms.server(function (stream) {
     var manifest = sbot.getManifest()
     var rpc = muxrpc({}, manifest)(sbot)
-    rpc.id = toId(stream.id)
+    rpc.id = toId(stream.remote)
     pull(stream, rpc.createStream(), stream)
   })
 }
-
-
-
-
-
-
-
-
-
-
-
 
