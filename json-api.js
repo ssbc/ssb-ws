@@ -32,6 +32,10 @@ function send(res, obj) {
 module.exports = function (sbot) {
 
   return Stack(
+    function (req, res, next) {
+      res.setHeader('Access-Control-Allow-Origin', '*')
+      next()
+    },
     msgHandler('/msg/', function (req, res, next) {
       sbot.get(req.id, function (err, msg) {
         if(err) return next(err)
