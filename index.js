@@ -36,7 +36,9 @@ var READ_ONLY = [
 
 exports.name = 'ws'
 exports.version = require('./package.json').version
-exports.manifest = {}
+exports.manifest = {
+  getAddress: 'sync'
+}
 
 function toId(id) {
   return '@'+id.toString('base64')+'.ed25519'
@@ -89,5 +91,12 @@ exports.init = function (sbot, config) {
     rpc.id = toId(stream.remote)
     pull(stream, rpc.createStream(), stream)
   })
+
+  return {
+    getAddress: function () {
+      return ms.getAddress()
+    }
+
+  }
 }
 
