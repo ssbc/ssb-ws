@@ -74,7 +74,7 @@ exports.init = function (sbot, config) {
 
   var ms = MultiServer([
     [
-      WS({server: server, port: port}),
+      WS({server: server, port: port, host: config.host || 'localhost'}),
       SHS({
         keys: toSodiumKeys(config.keys),
         appKey: cap,
