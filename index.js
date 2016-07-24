@@ -61,6 +61,7 @@ exports.init = function (sbot, config) {
     var self = this
     fn.apply(self, [id, function (err, allowed) {
       if(err) return cb(err)
+      console.log('WS AUTH', err, allowed)
       if(allowed) return cb(null, allowed)
       sbot.friends.get({source: sbot.id, dest: id}, function (err, follows) {
         if(err) return cb(err)
@@ -87,7 +88,7 @@ exports.init = function (sbot, config) {
 
   var close = ms.server(function (stream) {
     var manifest = sbot.getManifest()
-    var rpc = muxrpc({}, manifest)(sbot)
+    var rpc = muxrpc({}, manifest)(sbot, stream.auth)
     rpc.id = toId(stream.remote)
     pull(stream, rpc.createStream(), stream)
   })
@@ -105,5 +106,6 @@ exports.init = function (sbot, config) {
 
   }
 }
+
 
 
