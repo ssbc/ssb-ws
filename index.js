@@ -73,7 +73,7 @@ exports.init = function (sbot, config) {
 
   var ms = MultiServer([
     [
-      WS({server: server}),
+      WS({server: server, port: port}),
       SHS({
         keys: toSodiumKeys(config.keys),
         appKey: cap,
@@ -85,18 +85,25 @@ exports.init = function (sbot, config) {
     ]
   ])
 
-  ms.server(function (stream) {
+  var close = ms.server(function (stream) {
     var manifest = sbot.getManifest()
     var rpc = muxrpc({}, manifest)(sbot)
     rpc.id = toId(stream.remote)
     pull(stream, rpc.createStream(), stream)
   })
 
+  //close when the server closes.
+  sbot.close.hook(function (fn, args) {
+    close()
+    fn.apply(this, args)
+  })
+
   return {
     getAddress: function () {
-      return ms.getAddress()
+      return ms.stringify()
     }
 
   }
 }
+
 
