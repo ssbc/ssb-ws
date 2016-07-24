@@ -44,7 +44,13 @@ function toId(id) {
 
 exports.init = function (sbot, config) {
 
-  var server = http.createServer(JSONApi(sbot)).listen(8989)
+  var port
+  if(config.ws)
+    port = config.ws.port
+  if(!port)
+    port = 1024+(~~(Math.random()*(65536-1024)))
+
+  var server = http.createServer(JSONApi(sbot)).listen(port)
 
   //allow friends to 
   sbot.auth.hook(function (fn, args) {
