@@ -1,7 +1,7 @@
 {
   "name": "ssb-ws",
   "description": "",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "homepage": "https://github.com/dominictarr/ssb-ws",
   "repository": {
     "type": "git",
