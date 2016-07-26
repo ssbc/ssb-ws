@@ -18,7 +18,7 @@ function toSodiumKeys(keys) {
   }
 }
 
-var READ_ONLY = [
+var READ_AND_ADD = [ //except for add, of course
   'get',
   'getLatest',
   'createLogStream',
@@ -64,7 +64,7 @@ exports.init = function (sbot, config) {
       if(allowed) return cb(null, allowed)
       sbot.friends.get({source: sbot.id, dest: id}, function (err, follows) {
         if(err) return cb(err)
-        else if(follows) cb(null, {allow: READ_ONLY, deny: null})
+        else if(follows) cb(null, {allow: READ_AND_ADD, deny: null})
         else cb()
       })
     }])
