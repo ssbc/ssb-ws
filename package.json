@@ -1,6 +1,6 @@
 {
   "name": "ssb-ws",
-  "description": "",
+  "description": "websocket & http server for ssb",
   "version": "0.3.3",
   "homepage": "https://github.com/dominictarr/ssb-ws",
   "repository": {
