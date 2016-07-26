@@ -20,6 +20,7 @@ function toSodiumKeys(keys) {
 
 var READ_ONLY = [
   'get',
+  'getLatest',
   'createLogStream',
   'createUserStream',
   'links',
