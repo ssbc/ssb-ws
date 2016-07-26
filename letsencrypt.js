@@ -19,7 +19,7 @@ module.exports = function (config, handler, port) {
 
   var lex = LEX.create({
     configDir: path.join(config.path, 'letsencrypt'),
-    approveRegistration: function (host, cb) {
+    approveRegistration: function (_host, cb) {
       console.log('register certificate for', host)
       if(_host !== host)
         return cb(new Error('unexpected hostname'))
