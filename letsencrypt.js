@@ -1,11 +1,12 @@
+var path = require('path')
+var http = require('http')
+var https = require('https')
+
 try {
   var LEX = require('letsencrypt-express')
 } catch (err) {
   console.error(err)
 }
-
-var http = require('http')
-var https = require('https')
 
 module.exports = function (config, handler, port) {
   var host = config.host ? [config.host] : null
@@ -19,7 +20,7 @@ module.exports = function (config, handler, port) {
   var lex = LEX.create({
     configDir: path.join(config.path, 'letsencrypt'),
     approveRegistration: function (host, cb) {
-      console.log('register certificate for', hostname)
+      console.log('register certificate for', host)
       if(_host !== host)
         return cb(new Error('unexpected hostname'))
 
@@ -38,6 +39,7 @@ module.exports = function (config, handler, port) {
 
   //no http. just https.
 }
+
 
 
 
