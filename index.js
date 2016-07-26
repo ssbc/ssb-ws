@@ -4,7 +4,6 @@ var SHS = require('multiserver/plugins/shs')
 var http = require('http')
 var muxrpc = require('muxrpc')
 var pull = require('pull-stream')
-
 var JSONApi = require('./json-api')
 
 var cap =
@@ -61,7 +60,6 @@ exports.init = function (sbot, config) {
     var self = this
     fn.apply(self, [id, function (err, allowed) {
       if(err) return cb(err)
-      console.log('WS AUTH', err, allowed)
       if(allowed) return cb(null, allowed)
       sbot.friends.get({source: sbot.id, dest: id}, function (err, follows) {
         if(err) return cb(err)
@@ -106,6 +104,4 @@ exports.init = function (sbot, config) {
 
   }
 }
-
-
 
