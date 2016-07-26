@@ -5,6 +5,7 @@ var http = require('http')
 var muxrpc = require('muxrpc')
 var pull = require('pull-stream')
 var JSONApi = require('./json-api')
+var LetsEncrypt = require('./letsencrypt')
 
 var cap =
   new Buffer('1KHLiKZvAvjbY1ziZEHMXawbCEIM6qwjCDm3VYRan/s=', 'base64')
@@ -52,7 +53,7 @@ exports.init = function (sbot, config) {
   if(!port)
     port = 1024+(~~(Math.random()*(65536-1024)))
 
-  var server = http.createServer(JSONApi(sbot)).listen(port)
+  var server = LetsEncrypt(config, JSONApi(sbot), port)
 
   //allow friends to 
   sbot.auth.hook(function (fn, args) {
@@ -105,4 +106,6 @@ exports.init = function (sbot, config) {
 
   }
 }
+
+
 
