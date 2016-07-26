@@ -36,8 +36,9 @@ module.exports = function (sbot) {
     WebBoot,
     function (req, res, next) {
       res.setHeader('Access-Control-Allow-Origin', '*')
-      res.setHeader("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
-      res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST");
+      res.setHeader("Access-Control-Allow-Headers",
+      "Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since");
+      res.setHeader("Access-Control-Allow-Methods", "GET");
       next()
     },
     msgHandler('/msg/', function (req, res, next) {
