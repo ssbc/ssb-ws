@@ -4,6 +4,7 @@ var Stack = require('stack')
 var BlobsHttp = require('multiblob-http')
 var sort = require('ssb-sort')
 var pull = require('pull-stream')
+var WebBoot = require('web-bootloader/handler')
 
 function msgHandler(path, handler) {
   return function (req, res, next) {
@@ -32,8 +33,11 @@ function send(res, obj) {
 module.exports = function (sbot) {
 
   return Stack(
+    WebBoot,
     function (req, res, next) {
       res.setHeader('Access-Control-Allow-Origin', '*')
+      res.setHeader("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With");
+      res.setHeader("Access-Control-Allow-Methods", "GET, PUT, POST");
       next()
     },
     msgHandler('/msg/', function (req, res, next) {
@@ -62,6 +66,7 @@ module.exports = function (sbot) {
     BlobsHttp(sbot.blobs, '/blobs')
   )
 }
+
 
 
 
