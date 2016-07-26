@@ -14,7 +14,8 @@
     "pull-stream": "^3.4.3",
     "ssb-ref": "^2.3.0",
     "ssb-sort": "0.0.0",
-    "stack": "^0.1.0"
+    "stack": "^0.1.0",
+    "web-bootloader": "0.0.1"
   },
   "devDependencies": {},
   "scripts": {
