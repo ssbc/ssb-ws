@@ -25,7 +25,10 @@ var READ_AND_ADD = [ //except for add, of course
   'createLogStream',
   'createUserStream',
   'links',
+
   'blobs.add',
+  'blobs.size',
+  'blobs.has',
   'blobs.get',
 
   'add',
@@ -106,6 +109,8 @@ exports.init = function (sbot, config) {
 
   }
 }
+
+
 
 
 
