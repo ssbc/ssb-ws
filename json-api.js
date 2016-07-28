@@ -38,7 +38,7 @@ module.exports = function (sbot) {
       res.setHeader('Access-Control-Allow-Origin', '*')
       res.setHeader("Access-Control-Allow-Headers",
       "Authorization, Content-Type, If-Match, If-Modified-Since, If-None-Match, If-Unmodified-Since");
-      res.setHeader("Access-Control-Allow-Methods", "GET");
+      res.setHeader("Access-Control-Allow-Methods", "GET", "HEAD");
       next()
     },
     msgHandler('/msg/', function (req, res, next) {
@@ -48,7 +48,6 @@ module.exports = function (sbot) {
       })
     }),
     msgHandler('/thread/', function (req, res, next) {
-      console.log("GET THREAD", req.id)
       sbot.get(req.id, function (err, value) {
         if(err) return next(err)
         var msg = {key: req.id, value: value}
@@ -67,6 +66,7 @@ module.exports = function (sbot) {
     BlobsHttp(sbot.blobs, '/blobs')
   )
 }
+
 
 
 
