@@ -38,6 +38,7 @@ module.exports = function (config, handler, port) {
   ).listen(443)
 
   //no http. just https.
+  return server
 }
 
 
