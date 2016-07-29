@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "multiblob-http": "^0.2.0",
-    "multiserver": "^1.0.3",
+    "multiserver": "^1.2.0",
     "muxrpc": "^6.3.3",
     "pull-stream": "^3.4.3",
     "ssb-ref": "^2.3.0",
