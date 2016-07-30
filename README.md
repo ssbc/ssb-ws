@@ -8,11 +8,11 @@ Work In Progress
 sbot plugins.install ssb-ws
 ```
 
-make sure you set a port in your config file.
+make sure you set a port in your config file (~/.ssb/config).
 
 ``` json
 {
-  "ws": {"port: 8989}
+  "ws": {"port": 8989}
 }
 ```
 
