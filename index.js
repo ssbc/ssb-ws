@@ -24,12 +24,19 @@ var READ_AND_ADD = [ //except for add, of course
   'getLatest',
   'createLogStream',
   'createUserStream',
+
+  'createHistoryStream',
+  'getAddress',
+
   'links',
 
   'blobs.add',
   'blobs.size',
   'blobs.has',
   'blobs.get',
+  'blobs.changes',
+  'blobs.createWants',
+
 
   'add',
 
@@ -109,6 +116,12 @@ exports.init = function (sbot, config) {
 
   }
 }
+
+
+
+
+
+
 
 
 
