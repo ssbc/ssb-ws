@@ -5,6 +5,7 @@ var BlobsHttp = require('multiblob-http')
 var sort = require('ssb-sort')
 var pull = require('pull-stream')
 var WebBoot = require('web-bootloader/handler')
+var URL = require('url')
 
 function msgHandler(path, handler) {
   return function (req, res, next) {
@@ -31,7 +32,7 @@ function send(res, obj) {
 }
 
 module.exports = function (sbot) {
-
+  var prefix = '/blobs'
   return Stack(
     WebBoot,
     function (req, res, next) {
@@ -63,9 +64,21 @@ module.exports = function (sbot) {
       })
 
     }),
-    BlobsHttp(sbot.blobs, '/blobs')
+    function (req, res, next) {
+      if(!(req.method === "GET" || req.method == 'HEAD')) return next()
+
+      var u = URL.parse('http://makeurlparseright.com'+req.url)
+      var hash = decodeURIComponent(u.pathname.substring((prefix+'/get/').length))
+      //check if we don't already have this, tell blobs we want it, if necessary.
+      sbot.blobs.has(hash, function (err, has) {
+        if(has) next()
+        else sbot.blobs.want(hash, function (err, has) { next() })
+      })
+    },
+    BlobsHttp(sbot.blobs, prefix)
   )
 }
+
 
 
 
