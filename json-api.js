@@ -6,6 +6,7 @@ var sort = require('ssb-sort')
 var pull = require('pull-stream')
 var WebBoot = require('web-bootloader/handler')
 var URL = require('url')
+var Emoji = require('emoji-server')
 
 function msgHandler(path, handler) {
   return function (req, res, next) {
@@ -35,6 +36,7 @@ module.exports = function (sbot) {
   var prefix = '/blobs'
   return Stack(
     WebBoot,
+    Emoji('/img/emoji'),
     function (req, res, next) {
       res.setHeader('Access-Control-Allow-Origin', '*')
       res.setHeader("Access-Control-Allow-Headers",
