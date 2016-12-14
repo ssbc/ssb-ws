@@ -63,7 +63,7 @@ exports.init = function (sbot, config) {
   if(!port)
     port = 1024+(~~(Math.random()*(65536-1024)))
 
-  var server = LetsEncrypt(config, JSONApi(sbot), port)
+  var server = http.createServer(JSONApi(sbot)).listen(port)
 
   //allow friends to 
   sbot.auth.hook(function (fn, args) {
@@ -116,13 +116,6 @@ exports.init = function (sbot, config) {
 
   }
 }
-
-
-
-
-
-
-
 
 
 
