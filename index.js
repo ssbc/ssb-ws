@@ -86,7 +86,7 @@ exports.init = function (sbot, config) {
       WS({server: server, port: port, host: config.host || 'localhost'}),
       SHS({
         keys: toSodiumKeys(config.keys),
-        appKey: (config.caps && config.caps.shs) || cap,
+        appKey: (config.caps && new Buffer(config.caps.shs, "base64")) || cap,
         auth: function (id, cb) {
           sbot.auth(toId(id), cb)
         },
