@@ -51,7 +51,9 @@ exports.manifest = {
 }
 
 function toId(id) {
-  return '@'+id.toString('base64')+'.ed25519'
+  if (typeof id !== 'string') {
+    return '@' + id.toString('base64') + '.ed25519' // isn't this available somewhere else?
+  } else throw new Error('toId() called on string. todo: clean this your mess.')
 }
 
 exports.init = function (sbot, config) {
@@ -65,7 +67,7 @@ exports.init = function (sbot, config) {
   var server = http.createServer(JSONApi(sbot)).listen(port)
 
   function _auth (id, cb) {
-    sbot.friends.get({source: sbot.id, dest: id}, function (err, follows) {
+    sbot.friends.get({source: sbot.id, dest: toId(id)}, function (err, follows) {
       if(err) return cb(err)
       else if(follows) cb(null, {allow: READ_AND_ADD, deny: null})
       else cb()
