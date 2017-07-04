@@ -23,13 +23,14 @@ var READ_AND_ADD = [ //except for add, of course
   'getLatest',
   'createLogStream',
   'createUserStream',
-
+  'createFeedStream',
   'createHistoryStream',
   'getAddress',
 
   'links',
 
   'blobs.add',
+  'blobs.ls',
   'blobs.size',
   'blobs.has',
   'blobs.get',
@@ -40,7 +41,12 @@ var READ_AND_ADD = [ //except for add, of course
   'add',
 
   'query.read',
-  'links2.read'
+  'links2.read',
+
+  'gossip.changes',
+  'contacts.stream',
+  'backlinks.read',
+  'about.stream',
 ]
 
 
