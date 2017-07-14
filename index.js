@@ -51,7 +51,9 @@ exports.manifest = {
 }
 
 function toId(id) {
-  return '@'+id.toString('base64')+'.ed25519'
+  if (typeof id !== 'string') {
+    return '@' + id.toString('base64') + '.ed25519' // isn't this available somewhere else?
+  } else throw new Error('toId() called on string. todo: clean this your mess.')
 }
 
 exports.init = function (sbot, config) {
@@ -64,22 +66,13 @@ exports.init = function (sbot, config) {
 
   var server = http.createServer(JSONApi(sbot)).listen(port)
 
-  //allow friends to 
-  sbot.auth.hook(function (fn, args) {
-    var id = args[0]
-    var cb = args[1]
-    var self = this
-    fn.apply(self, [id, function (err, allowed) {
+  function _auth (id, cb) {
+    sbot.friends.get({source: sbot.id, dest: toId(id)}, function (err, follows) {
       if(err) return cb(err)
-      if(allowed) return cb(null, allowed)
-      sbot.friends.get({source: sbot.id, dest: id}, function (err, follows) {
-        if(err) return cb(err)
-        else if(follows) cb(null, {allow: READ_AND_ADD, deny: null})
-        else cb()
-      })
-    }])
-
-  })
+      else if(follows) cb(null, {allow: READ_AND_ADD, deny: null})
+      else cb()
+    })
+  }
 
   var ms = MultiServer([
     [
@@ -88,7 +81,10 @@ exports.init = function (sbot, config) {
         keys: toSodiumKeys(config.keys),
         appKey: (config.caps && new Buffer(config.caps.shs, "base64")) || cap,
         auth: function (id, cb) {
-          sbot.auth(toId(id), cb)
+          sbot.auth(toId(id), function (err, allowed) {
+            if(err || allowed) cb(err, allowed)
+            else _auth(id, cb)
+          })
         },
         timeout: config.timeout
       })
@@ -115,6 +111,9 @@ exports.init = function (sbot, config) {
 
   }
 }
+
+
+
 
 
 
