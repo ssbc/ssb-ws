@@ -6,24 +6,6 @@ var pull = require('pull-stream')
 var URL = require('url')
 var Emoji = require('emoji-server')
 
-function msgHandler(path, handler) {
-  return function (req, res, next) {
-    console.log(req.method, req.url)
-    if(req.method !== 'GET') return next()
-    if(req.url.indexOf(path) === 0) {
-      var id = req.url.substring(path.length)
-      if(!ref.isMsg(id))
-        next(new Error('not a valid message id:'+id))
-      else {
-        req.id = id
-        handler(req, res, next)
-      }
-    }
-    else
-      next()
-  }
-}
-
 function send(res, obj) {
   res.writeHead(200, {'Content-Type': 'application/json'})
   res.end(JSON.stringify(obj, null, 2))
@@ -70,12 +52,4 @@ module.exports = function (sbot, layers) {
     BlobsHttp(sbot.blobs, prefix)
   )
 }
-
-
-
-
-
-
-
-
 
