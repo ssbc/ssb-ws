@@ -2,9 +2,7 @@
 var ref = require('ssb-ref')
 var Stack = require('stack')
 var BlobsHttp = require('multiblob-http')
-//var sort = require('ssb-sort')
 var pull = require('pull-stream')
-////var WebBoot = require('web-bootloader/handler')
 var URL = require('url')
 var Emoji = require('emoji-server')
 
@@ -34,11 +32,11 @@ function send(res, obj) {
 module.exports = function (sbot, layers) {
   var prefix = '/blobs'
   return Stack(
-//    WebBoot,
     function (req, res, next) {
       Stack.compose.apply(null, layers)(req, res, next)
     },
     Emoji('/img/emoji'),
+    //blobs are served over CORS, so you can get blobs from any pub.
     function (req, res, next) {
       res.setHeader('Access-Control-Allow-Origin', '*')
       res.setHeader("Access-Control-Allow-Headers",
@@ -46,29 +44,6 @@ module.exports = function (sbot, layers) {
       res.setHeader("Access-Control-Allow-Methods", "GET", "HEAD");
       next()
     },
-//    msgHandler('/msg/', function (req, res, next) {
-//      sbot.get(req.id, function (err, msg) {
-//        if(err) return next(err)
-//        send(res, {key: req.id, value: msg})
-//      })
-//    }),
-//    msgHandler('/thread/', function (req, res, next) {
-//      sbot.get(req.id, function (err, value) {
-//        if(err) return next(err)
-//        if('string' === typeof value.content) return next(new Error('private'))
-//        var msg = {key: req.id, value: value}
-//
-//        pull(
-//          sbot.links({rel: 'root', dest: req.id, values: true, keys: true}),
-//          pull.collect(function (err, ary) {
-//            if(err) return next(err)
-//            ary.unshift(msg)
-//            send(res, sort(ary))
-//          })
-//        )
-//      })
-//
-//    }),
     function (req, res, next) {
       if(!(req.method === "GET" || req.method == 'HEAD')) return next()
 
@@ -83,4 +58,8 @@ module.exports = function (sbot, layers) {
     BlobsHttp(sbot.blobs, prefix)
   )
 }
+
+
+
+
 
