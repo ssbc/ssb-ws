@@ -36,7 +36,6 @@ var READ_AND_ADD = [ //except for add, of course
   'blobs.changes',
   'blobs.createWants',
 
-
   'add',
 
   'query.read',
@@ -64,7 +63,8 @@ exports.init = function (sbot, config) {
   if(!port)
     port = 1024+(~~(Math.random()*(65536-1024)))
 
-  var server = http.createServer(JSONApi(sbot)).listen(port)
+  var layers = []
+  var server = http.createServer(JSONApi(sbot, layers)).listen(port)
 
   function _auth (id, cb) {
     sbot.friends.get({source: sbot.id, dest: toId(id)}, function (err, follows) {
@@ -107,13 +107,14 @@ exports.init = function (sbot, config) {
   return {
     getAddress: function () {
       return ms.stringify()
+    },
+    use: function (handler) {
+      console.log("USE", handler)
+      layers.push(handler)
     }
 
   }
 }
-
-
-
 
 
 

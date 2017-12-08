@@ -2,9 +2,9 @@
 var ref = require('ssb-ref')
 var Stack = require('stack')
 var BlobsHttp = require('multiblob-http')
-var sort = require('ssb-sort')
+//var sort = require('ssb-sort')
 var pull = require('pull-stream')
-var WebBoot = require('web-bootloader/handler')
+////var WebBoot = require('web-bootloader/handler')
 var URL = require('url')
 var Emoji = require('emoji-server')
 
@@ -14,7 +14,6 @@ function msgHandler(path, handler) {
     if(req.method !== 'GET') return next()
     if(req.url.indexOf(path) === 0) {
       var id = req.url.substring(path.length)
-      console.log("MSG?", id)
       if(!ref.isMsg(id))
         next(new Error('not a valid message id:'+id))
       else {
@@ -32,10 +31,13 @@ function send(res, obj) {
   res.end(JSON.stringify(obj, null, 2))
 }
 
-module.exports = function (sbot) {
+module.exports = function (sbot, layers) {
   var prefix = '/blobs'
   return Stack(
-    WebBoot,
+//    WebBoot,
+    function (req, res, next) {
+      Stack.compose.apply(null, layers)(req, res, next)
+    },
     Emoji('/img/emoji'),
     function (req, res, next) {
       res.setHeader('Access-Control-Allow-Origin', '*')
@@ -44,28 +46,29 @@ module.exports = function (sbot) {
       res.setHeader("Access-Control-Allow-Methods", "GET", "HEAD");
       next()
     },
-    msgHandler('/msg/', function (req, res, next) {
-      sbot.get(req.id, function (err, msg) {
-        if(err) return next(err)
-        send(res, {key: req.id, value: msg})
-      })
-    }),
-    msgHandler('/thread/', function (req, res, next) {
-      sbot.get(req.id, function (err, value) {
-        if(err) return next(err)
-        var msg = {key: req.id, value: value}
-
-        pull(
-          sbot.links({rel: 'root', dest: req.id, values: true, keys: true}),
-          pull.collect(function (err, ary) {
-            if(err) return next(err)
-            ary.unshift(msg)
-            send(res, sort(ary))
-          })
-        )
-      })
-
-    }),
+//    msgHandler('/msg/', function (req, res, next) {
+//      sbot.get(req.id, function (err, msg) {
+//        if(err) return next(err)
+//        send(res, {key: req.id, value: msg})
+//      })
+//    }),
+//    msgHandler('/thread/', function (req, res, next) {
+//      sbot.get(req.id, function (err, value) {
+//        if(err) return next(err)
+//        if('string' === typeof value.content) return next(new Error('private'))
+//        var msg = {key: req.id, value: value}
+//
+//        pull(
+//          sbot.links({rel: 'root', dest: req.id, values: true, keys: true}),
+//          pull.collect(function (err, ary) {
+//            if(err) return next(err)
+//            ary.unshift(msg)
+//            send(res, sort(ary))
+//          })
+//        )
+//      })
+//
+//    }),
     function (req, res, next) {
       if(!(req.method === "GET" || req.method == 'HEAD')) return next()
 
@@ -80,10 +83,4 @@ module.exports = function (sbot) {
     BlobsHttp(sbot.blobs, prefix)
   )
 }
-
-
-
-
-
-
 
