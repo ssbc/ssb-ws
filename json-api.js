@@ -45,6 +45,18 @@ module.exports = function (sbot, layers) {
       next()
     },
     function (req, res, next) {
+      var id
+      try { id = decodeURIComponent(req.url.substring(5)) }
+      catch (_) { id = req.url.substring(5) }
+      console.log(req.url, id)
+      if(req.url.substring(0, 5) !== '/msg/' || !ref.isMsg(id)) return next()
+
+      sbot.get(id, function (err, msg) {
+        if(err) return next(err)
+        send(res, {key: id, value: msg})
+      })
+    },
+    function (req, res, next) {
       if(!(req.method === "GET" || req.method == 'HEAD')) return next()
 
       var u = URL.parse('http://makeurlparseright.com'+req.url)
@@ -58,6 +70,10 @@ module.exports = function (sbot, layers) {
     BlobsHttp(sbot.blobs, prefix)
   )
 }
+
+
+
+
 
 
 
