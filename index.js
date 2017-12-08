@@ -109,14 +109,10 @@ exports.init = function (sbot, config) {
       return ms.stringify()
     },
     use: function (handler) {
-      console.log("USE", handler)
       layers.push(handler)
     }
 
   }
 }
-
-
-
 
 
