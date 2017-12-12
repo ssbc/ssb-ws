@@ -11,6 +11,9 @@ function send(res, obj) {
   res.end(JSON.stringify(obj, null, 2))
 }
 
+var BoxStream = require('pull-box-stream')
+var zeros = new Buffer(24); zeros.fill(0)
+
 module.exports = function (sbot, layers) {
   var prefix = '/blobs'
   return Stack(
@@ -49,7 +52,29 @@ module.exports = function (sbot, layers) {
         else sbot.blobs.want(hash, function (err, has) { next() })
       })
     },
-    BlobsHttp(sbot.blobs, prefix)
+    BlobsHttp(sbot.blobs, prefix, {transform: function (q) {
+      if(q.unbox && /\.boxs$/.test(q.unbox)) {
+        var key = new Buffer(q.unbox.replace(/\s/g, '+'), 'base64')
+        if(key.length !== 32)
+            return function (read) {
+              return function (abort, cb) {
+                read(new Error('key must be 32 bytes long'), cb)
+              }
+            }
+        return BoxStream.createUnboxStream(
+          new Buffer(key, 'base64'),
+          zeros
+        )
+      }
+      return pull.through()
+    }})
   )
 }
+
+
+
+
+
+
+
 
