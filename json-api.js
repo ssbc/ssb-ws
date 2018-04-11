@@ -33,7 +33,6 @@ module.exports = function (sbot, layers) {
       var id
       try { id = decodeURIComponent(req.url.substring(5)) }
       catch (_) { id = req.url.substring(5) }
-      console.log(req.url, id)
       if(req.url.substring(0, 5) !== '/msg/' || !ref.isMsg(id)) return next()
 
       sbot.get(id, function (err, msg) {
@@ -52,7 +51,7 @@ module.exports = function (sbot, layers) {
         else sbot.blobs.want(hash, function (err, has) { next() })
       })
     },
-    BlobsHttp(sbot.blobs, prefix, {transform: function (q) {
+    BlobsHttp(sbot.blobs, prefix, {size: false, transform: function (q) {
       if(q.unbox && /\.boxs$/.test(q.unbox)) {
         var key = new Buffer(q.unbox.replace(/\s/g, '+'), 'base64')
         if(key.length !== 32)
@@ -70,8 +69,6 @@ module.exports = function (sbot, layers) {
     }})
   )
 }
-
-
 
 
 
