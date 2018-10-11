@@ -42,11 +42,12 @@ exports.init = function (sbot, config) {
   var layers = []
   var server, ws_server
 
-  function createServer (instance) {
+  function createServer (config, instance) {
+    instance = instance || 0
     if(server) return server
     server = http.createServer(JSONApi(sbot, layers)).listen(port+instance)
     ws_server = WS({
-      server: server, port: port, host: config.host || 'localhost'
+      server: server, port: port+instance, host: config.host || 'localhost'
     })
     return server
   }
@@ -66,10 +67,12 @@ exports.init = function (sbot, config) {
     })
   })
 
-  sbot.multiserver.transport(function (instance) {
-    console.log('create ws server'.toUpperCase())
-    createServer(instance)
-    return ws_server
+  sbot.multiserver.transport({
+    name: 'ws',
+    create: function (config, instance) {
+      createServer(config, instance)
+      return ws_server
+    }
   })
 
   return {
@@ -78,5 +81,4 @@ exports.init = function (sbot, config) {
     }
   }
 }
-
 
