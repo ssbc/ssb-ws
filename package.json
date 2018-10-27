@@ -10,7 +10,7 @@
   "dependencies": {
     "emoji-server": "^1.0.0",
     "multiblob-http": "^0.4.2",
-    "multiserver": "^1.13.5",
+    "multiserver": "^2.0.0",
     "multiserver-scopes": "^1.0.0",
     "muxrpc": "^6.3.3",
     "pull-box-stream": "^1.0.13",
