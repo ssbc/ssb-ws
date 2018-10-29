@@ -56,9 +56,9 @@ exports.init = function (sbot, config) {
       else console.log('Listening on ' + _host + ':' + _port, '(ssb-ws)')
       if (cb) return cb(err)
     })
-    ws_server = WS({
+    ws_server = WS(Object.assign({
       server: server, port: _port, host: _host
-    })
+    }, config))
     ws_servers[key] = ws_server
     return ws_server
   }
