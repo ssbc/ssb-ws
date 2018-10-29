@@ -46,9 +46,9 @@ exports.init = function (sbot, config) {
     instance = instance || 0
     if(server) return server
     server = http.createServer(JSONApi(sbot, layers)).listen(port+instance)
-    ws_server = WS({
-      server: server, port: port+instance, host: config.host || 'localhost'
-    })
+    ws_server = WS(Object.assign({
+      server: server, port: _port, host: _host
+    }, config))
     return server
   }
 
