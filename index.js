@@ -68,12 +68,9 @@ exports.init = function (sbot, config) {
       var _host = config.host || 'localhost'
       var _port = config.port || port
       //debug('listening on host=%s port=%d', _host, _port)
-      var server = http.createServer(config.web !== false ? handlers : no_handler).listen(_port, _host, function(err) {
-        if (err) console.error('ssb-ws failed to listen on ' + _host + ':' + _port, err)
-        else console.log('Listening on ' + _host + ':' + _port, '(ssb-ws)')
-      })
       return WS(Object.assign({
-        server: server, port: _port, host: _host
+        port: _port, host: _host,
+        handler: config.web !== false ? handlers : no_handler
       }, config))
     }
   })
@@ -84,6 +81,5 @@ exports.init = function (sbot, config) {
     }
   }
 }
-
 
 
