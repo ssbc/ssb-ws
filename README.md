@@ -14,7 +14,8 @@ best configured via [connections config](https://github.com/ssbc/ssb-config#conn
     "ws": [{
       "scope": ["public", "local", "device"],
       "port": 9000,
-      "transform": "shs"
+      "transform": "shs",
+      "http": true //serve http, see ws.use(handler)
     }]
   }
 }
@@ -36,7 +37,7 @@ If used with a [secure transport](https://github.com/auditdrivencrypto/secret-ha
 that authenticates the client `"transport": "shs"`
 then this is not a problem.
 
-## adding your own http handlers
+## ws.use(handler) - http handlers
 
 sometimes you need to do http, but if every plugin that did that
 created it's own servers there would be mass panic.
@@ -61,6 +62,9 @@ require('scuttlebot')
     }
   })
 ```
+
+http hosting on a particular multiserver address can be disabled
+using `{http:false}` in the incoming multiserver config.
 
 ## License
 
