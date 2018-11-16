@@ -70,7 +70,7 @@ exports.init = function (sbot, config) {
       //debug('listening on host=%s port=%d', _host, _port)
       return WS(Object.assign({
         port: _port, host: _host,
-        handler: config.web !== false ? handlers : no_handler
+        handler: config.http !== false ? handlers : no_handler
       }, config))
     }
   })
