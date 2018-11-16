@@ -44,7 +44,9 @@ exports.init = function (sbot, config) {
   var layers = []
 
   var handlers = JSONApi(sbot, layers)
-
+  function no_handler (req, res, next) {
+    next(new Error('ssb-ws:web sockets only'))
+  }
   sbot.auth.hook(function (fn, args) {
     var id = args[0]
     var cb = args[1]
@@ -63,16 +65,12 @@ exports.init = function (sbot, config) {
   sbot.multiserver.transport({
     name: 'ws',
     create: function (config) {
-      if(c++) throw new Error('more than one server, same port:'+JSON.stringify(config))
       var _host = config.host || 'localhost'
       var _port = config.port || port
       //debug('listening on host=%s port=%d', _host, _port)
-      var server = http.createServer(handlers).listen(_port, _host, function(err) {
-        if (err) console.error('ssb-ws failed to listen on ' + _host + ':' + _port, err)
-        else console.log('Listening on ' + _host + ':' + _port, '(ssb-ws)')
-      })
       return WS(Object.assign({
-        server: server, port: _port, host: _host
+        port: _port, host: _host,
+        handler: config.web !== false ? handlers : no_handler
       }, config))
     }
   })
@@ -83,4 +81,5 @@ exports.init = function (sbot, config) {
     }
   }
 }
+
 

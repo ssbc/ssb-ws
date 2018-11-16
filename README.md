@@ -11,14 +11,19 @@ best configured via [connections config](https://github.com/ssbc/ssb-config#conn
 ``` json
 "connections": {
   "incoming": {
-    "ws": {
+    "ws": [{
       "scope": ["public", "local", "device"],
       "port": 9000,
       "transform": "shs"
-    }
+    }]
   }
 }
 ```
+
+you can have more than one ws server if desired.
+you can also disable hosting of http handlers
+by setting `web:false` on the config item,
+`connections.incoming.ws[N].web = false`
 
 ## noauth
 
