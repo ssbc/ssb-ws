@@ -11,13 +11,17 @@
     "emoji-server": "^1.0.0",
     "multiblob-http": "^0.4.2",
     "multiserver": "^3.0.2",
-    "multiserver-scopes": "^1.0.0",
-    "muxrpc": "^6.3.3",
     "pull-box-stream": "^1.0.13",
+    "pull-stream": "^3.6.9",
     "ssb-ref": "^2.3.0",
     "stack": "^0.1.0"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "ssb-client": "^4.7.1",
+    "ssb-config": "^3.0.0",
+    "ssb-server": "^14.1.6",
+    "tape": "^4.10.1"
+  },
   "scripts": {
     "test": "set -e; for t in test/*.js; do node $t; done"
   },
