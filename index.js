@@ -19,13 +19,6 @@ exports.init = function (sbot, config) {
   function no_handler (req, res, next) {
     next(new Error('ssb-ws:web sockets only'))
   }
-  sbot.auth.hook(function (fn, args) {
-    var id = args[0]
-    var cb = args[1]
-    fn(id, function (err, value) {
-      cb(err, value)
-    })
-  })
   sbot.multiserver.transport({
     name: 'ws',
     create: function (config) {
