@@ -63,8 +63,10 @@ exports.init = function (sbot, config) {
   if(!port)
     port = 1024+(~~(Math.random()*(65536-1024)))
 
+  var host = config.ws && config.ws.host
+
   var layers = []
-  var server = http.createServer(JSONApi(sbot, layers)).listen(port)
+  var server = http.createServer(JSONApi(sbot, layers)).listen({ port, host })
 
   function _auth (id, cb) {
     sbot.friends.get({source: sbot.id, dest: toId(id)}, function (err, follows) {
