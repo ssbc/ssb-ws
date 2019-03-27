@@ -23,7 +23,7 @@
     "tape": "^4.10.1"
   },
   "browser": {
-    "./index.js": "./browser.js"
+    "./index.js": "./client.js"
   },
   "scripts": {
     "test": "set -e; for t in test/*.js; do node $t; done"
