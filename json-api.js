@@ -8,8 +8,9 @@ function send(res, obj) {
   res.end(JSON.stringify(obj, null, 2))
 }
 
-module.exports = function (sbot, layers) {
-  return Stack(
+module.exports = function (sbot) {
+  var layers = []
+  var stack = Stack(
     function (req, res, next) {
       Stack.compose.apply(null, layers)(req, res, next)
     },
@@ -28,5 +29,7 @@ module.exports = function (sbot, layers) {
     },
     require('./blobs')(sbot, {prefix: '/blobs'})
   )
+  stack.layers = layers
+  return stack
 }
 

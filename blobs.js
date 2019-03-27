@@ -26,8 +26,7 @@ module.exports = function (sbot, opts) {
   }})
 
   return function (req, res, next) {
-    if(req.url.substring(0, prefix.length) !== prefix)
-      return next()
+    if(req.url.substring(0, prefix.length) !== prefix) return next()
     if(!(req.method === "GET" || req.method == 'HEAD')) return next()
 
     var u = URL.parse('http://makeurlparseright.com'+req.url)
@@ -41,6 +40,7 @@ module.exports = function (sbot, opts) {
     })
   }
 }
+
 
 
 
