@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "emoji-server": "^1.0.0",
-    "multiblob-http": "^0.4.2",
+    "multiblob-http": "^1.0.0",
     "multiserver": "^3.0.2",
     "pull-box-stream": "^1.0.13",
     "pull-stream": "^3.6.9",
