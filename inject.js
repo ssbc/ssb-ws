@@ -19,10 +19,10 @@ module.exports = function (createHandlers) {
     function no_handler (req, res, next) {
       next(new Error('ssb-ws:web sockets only'))
     }
+    var handlers = createHandlers(sbot)
     sbot.multiserver.transport({
       name: 'ws',
       create: function (config) {
-        var handlers = config.http ? createHandlers(sbot) : no_handler
         var _host = config.host || 'localhost'
         var _port = config.port || port
         return WS(Object.assign({
@@ -41,9 +41,4 @@ module.exports = function (createHandlers) {
 
   return exports
 }
-
-
-
-
-
 
