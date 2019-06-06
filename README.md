@@ -1,6 +1,15 @@
 # ssb-ws
 
-ssb-ws & http server for ssb.
+** creates a web server for web ssb**
+
+It creates web-friendly things that web-scuttlebutt clients can connect to (so not using electron).
+
+ssb-ws is used by web clients (lite client, and some UIs, such as patchless) and in web projects like [secret-islands](https://github.com/dangerousbeans/secret-islands).
+
+Most scuttlebutt clients talk over a unix socket connection, but the web clients talk over a web socket, but it also has a normal web server for images.
+
+
+### usage
 
 ``` js
 sbot plugins.install ssb-ws
@@ -26,6 +35,7 @@ you can also disable hosting of http handlers
 by setting `web:false` on the config item,
 `connections.incoming.ws[N].web = false`
 
+# Api
 ## noauth
 
 given the flexibility of multiserver, you may want to run
@@ -69,8 +79,3 @@ using `{http:false}` in the incoming multiserver config.
 ## License
 
 MIT
-
-
-
-
-
