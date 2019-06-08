@@ -2,7 +2,7 @@
 
 **Creates a web server for ssb clients**
 
-It is used by lite web clients, in [scuttle-shell ](https://github.com/ssbc/scuttle-shell) which is required for [Patchfox](https://github.com/soapdog/patchfox), and in web projects like [secret-islands](https://github.com/dangerousbeans/secret-islands).
+It is used by ssb clients, in [scuttle-shell ](https://github.com/ssbc/scuttle-shell) which is required for [Patchfox](https://github.com/soapdog/patchfox), and in web projects like [secret-islands](https://github.com/dangerousbeans/secret-islands).
 
 Peers can replicate over ws, if a pub exposes a ws address and this enables sbot peers running in a browser (WIP).
 
