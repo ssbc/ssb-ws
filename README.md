@@ -1,13 +1,12 @@
 # ssb-ws
 
-** creates a web server for web ssb**
+**Creates a web server for ssb clients**
 
-It creates web-friendly things that web-scuttlebutt clients can connect to (so not using electron).
+It is used by ssb clients, in [scuttle-shell ](https://github.com/ssbc/scuttle-shell) which is required for [Patchfox](https://github.com/soapdog/patchfox), and in web projects like [secret-islands](https://github.com/dangerousbeans/secret-islands).
 
-ssb-ws is used by web clients (lite client, and some UIs, such as patchless) and in web projects like [secret-islands](https://github.com/dangerousbeans/secret-islands).
+Peers can replicate over ws, if a pub exposes a ws address and this enables sbot peers running in a browser (WIP).
 
-Most scuttlebutt clients talk over a unix socket connection, but the web clients talk over a web socket, but it also has a normal web server for images.
-
+Since ssb-ws creates a web server, it also exposes an interface that allows plugins to expose things over http. Blobs and emoji are provided via this plugin too.
 
 ### usage
 
@@ -24,7 +23,7 @@ best configured via [connections config](https://github.com/ssbc/ssb-config#conn
       "scope": ["public", "local", "device"],
       "port": 9000,
       "transform": "shs",
-      "http": true //serve http, see ws.use(handler)
+      "http": true // serve http, see ws.use(handler)
     }]
   }
 }
@@ -52,7 +51,7 @@ then this is not a problem.
 sometimes you need to do http, but if every plugin that did that
 created it's own servers there would be mass panic.
 But never fear, with ssb-ws, you can add http handlers
-as [connect style middleware](https://www.npmjs.com/package/stack)
+as [connect style middleware](https://www.npmjs.com/package/stack).
 
 Here is an example sbot plugin that
 adds a single route: to output the current sbot address.
