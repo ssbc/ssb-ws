@@ -1,5 +1,14 @@
 var WS = require('multiserver/plugins/ws')
 
+function no_handler (req, res, next) {
+  next(new Error('ssb-ws:web sockets only'))
+}
+
+function getPort (config) {
+  if (config.ws && config.ws.port) return config.ws.port
+  return 1024+(~~(Math.random()*(65536-1024)))
+}
+
 module.exports = function (createHandlers) {
   var exports = {}
   exports.name = 'ws'
@@ -7,26 +16,23 @@ module.exports = function (createHandlers) {
   exports.manifest = {}
 
   exports.init = function (sbot, config) {
-    var port
-    if(config.ws) {
-      port = config.ws.port
-    }
-    if(!port)
-      port = 1024+(~~(Math.random()*(65536-1024)))
-
-    var layers = []
+    var port = getPort(config)
+    var handlers
 
     function no_handler (req, res, next) {
       next(new Error('ssb-ws:web sockets only'))
     }
+
     var handlers = createHandlers(sbot)
+
     sbot.multiserver.transport({
       name: 'ws',
       create: function (config) {
         var _host = config.host || 'localhost'
         var _port = config.port || port
         return WS(Object.assign({
-          port: _port, host: _host,
+          host: _host,
+          port: _port,
           handler: config.http !== false ? handlers : no_handler
         }, config))
       }
@@ -34,11 +40,10 @@ module.exports = function (createHandlers) {
 
     return {
       use: function (handler) {
-        if(handlers.layers) handlers.layers.push(handler)
+        if (handlers.layers) handlers.layers.push(handler)
       }
     }
   }
 
   return exports
 }
-
