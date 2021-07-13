@@ -8,6 +8,10 @@ var zeros = new Buffer(24); zeros.fill(0)
 module.exports = function (sbot, opts) {
   var prefix = opts.prefix
 
+  if (!sbot.blobs) {
+    throw new Error("ssb-ws requires the ssb-blobs plugin, please add to your ssb config")
+  }
+
   var handler = BlobsHttp(sbot.blobs, prefix, {size: false, transform: function (q) {
     if(q.unbox && /\.boxs$/.test(q.unbox)) {
       var key = new Buffer(q.unbox.replace(/\s/g, '+'), 'base64')
